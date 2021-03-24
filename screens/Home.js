@@ -3,8 +3,9 @@ import {TextInput, Button, Title, Card} from 'react-native-paper';
 import Header from './Header';
 import Search from './Search';
 import {View, Text, StyleSheet, Image} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
-const API_key = '566445bb54564625884e2b5983e5375f';
+const API_key = '9c653fe66d4643b2b05f717b2fabfd51';
 
 const Home = props => {
   const [info, setInfo] = useState({
@@ -18,10 +19,12 @@ const Home = props => {
   useEffect(() => {
     getweather();
   }, []);
-  const getweather = () => {
-    let Mycity;
-    const {city} = props.route.params;
-    Mycity = city;
+  const getweather = async () => {
+    let Mycity = await AsyncStorage.getItem('newcity');
+    if (!Mycity) {
+      const {city} = props.route.params;
+      Mycity = city;
+    }
     console.log(Mycity);
 
     fetch(

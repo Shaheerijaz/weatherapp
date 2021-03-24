@@ -3,11 +3,13 @@ import {TextInput, Button} from 'react-native-paper';
 import Header from './Header';
 import getweather from './Home';
 import {View, Text, StyleSheet} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Search = ({navigation}) => {
   const [city, setCity] = useState('');
 
-  const btnClick = () => {
+  const btnClick = async () => {
+    await AsyncStorage.setItem('newcity', city);
     navigation.navigate('home', {city: city});
   };
   const listClick = cityName => {
