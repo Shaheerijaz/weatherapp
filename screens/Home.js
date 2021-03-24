@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import {TextInput, Button, Title, Card} from 'react-native-paper';
 import Header from './Header';
+import Search from './Search';
 import {View, Text, StyleSheet, Image} from 'react-native';
 
 const API_key = '566445bb54564625884e2b5983e5375f';
 
-const Home = () => {
+const Home = props => {
   const [info, setInfo] = useState({
     city: 'loading..!!',
     temp: 'loading..!!',
@@ -18,19 +19,29 @@ const Home = () => {
     getweather();
   }, []);
   const getweather = () => {
-    fetch(`https://api.weatherbit.io/v2.0/current?&city=london&key=${API_key}`)
+    let Mycity;
+    const {city} = props.route.params;
+    Mycity = city;
+    console.log(Mycity);
+
+    fetch(
+      `https://api.weatherbit.io/v2.0/current?&city=${Mycity}&key=${API_key}`,
+    )
       .then(data => data.json())
       .then(results => {
         setInfo({
           city: results.data[0].city_name,
-          temp: results.data[0].temp,
-          humidity: results.data[0].rh,
+          temp: results.data[0].temp.toFixed(),
+          humidity: results.data[0].rh.toFixed(),
           desc: results.data[0].weather.description,
           icon: results.data[0].weather.icon,
         });
         console.log(results.data[0].weather.icon);
       });
   };
+  if (props.route.params.city !== 'london') {
+    getweather();
+  }
   return (
     <View style={styles.container}>
       <Header name="Weather App" style={styles.container} />
@@ -47,7 +58,7 @@ const Home = () => {
         />
       </View>
       <Card style={styles.card}>
-        <Title style={styles.sub}> Temperature = {info.temp} </Title>
+        <Title style={styles.sub}> Temperature = {info.temp}&deg; </Title>
       </Card>
 
       <Card style={styles.card}>

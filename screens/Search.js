@@ -1,18 +1,18 @@
 import React, {useState} from 'react';
 import {TextInput, Button} from 'react-native-paper';
 import Header from './Header';
+import getweather from './Home';
 import {View, Text, StyleSheet} from 'react-native';
 
-const Search = () => {
+const Search = ({navigation}) => {
   const [city, setCity] = useState('');
-  const [cities, setCities] = useState('');
-  const fetchCities = text => {
-    setCity(text);
-    fetch('http://autocomplete.wunderground.com/aq?query=' + text)
-      .then(item => item.json())
-      .then(cityData => {
-        console.log(cityData);
-      });
+
+  const btnClick = () => {
+    navigation.navigate('home', {city: city});
+  };
+  const listClick = cityName => {
+    setCity(cityName);
+    navigation.navigate('home', {city: cityName});
   };
 
   return (
@@ -21,13 +21,16 @@ const Search = () => {
       <TextInput
         label="City Name"
         value={city}
-        onChangeText={text => fetchCities(text)}
+        onChangeText={text => setCity(text)}
+        // onSubmitEditing={() => {
+        //   getweather;
+        // }}
       />
       <Button
         icon="content-save"
         mode="contained"
         style={styles.button}
-        onPress={() => console.log('Pressed')}>
+        onPress={() => btnClick()}>
         <Text style={styles.theme}>Search</Text>
       </Button>
     </View>

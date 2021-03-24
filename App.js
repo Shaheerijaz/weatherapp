@@ -45,7 +45,11 @@ const App = () => {
             inactiveBackgroundColor: '#00aaff',
           }}>
           <Tab.Screen name="search" component={Search} />
-          <Tab.Screen name="home" component={Home} />
+          <Tab.Screen
+            name="home"
+            component={Home}
+            initialParams={{city: 'london'}}
+          />
         </Tab.Navigator>
       </NavigationContainer>
     </>
